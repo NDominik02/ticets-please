@@ -22,6 +22,26 @@ type Query {
     orders: [Order!]! @all
 }
 
+input CreateProductInput {
+    name: String!
+    description: String
+    price: Int!
+    count: Int!
+}
+
+type Mutation {
+    createProduct(input: CreateProductInput!): Product @create
+}
+
+# type Mutation {
+#     createProduct(
+#         name: String!
+#         description: String
+#         price: Int!
+#         count: Int!
+#     ): Product @create
+# }
+
 type User {
     id: ID!
     orders: [Order!]! @hasMany
@@ -36,7 +56,7 @@ type Product {
     id: ID!
     name: String!
     orders: [Order!]! @belongsToMany
-    description: String!
+    description: String
     price: Int!
     count: Int!
     created_at: DateTime!

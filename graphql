@@ -20,6 +20,8 @@ type Query {
     order(id: ID @eq): Order @find
 
     orders: [Order!]! @all
+
+    priceBetween(min: Int!, max: Int!): [Product!]! @all
 }
 
 input CreateProductInput {

@@ -1,0 +1,54 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    user(
+        id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+        email: String
+            @eq
+            @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    ): User @find
+
+    users(name: String @where(operator: "like")): [User!]!
+        @paginate(defaultCount: 10)
+
+    product(id: ID @eq): Product @find
+
+    products: [Product!]! @all
+
+    order(id: ID @eq): Order @find
+
+    orders: [Order!]! @all
+}
+
+type User {
+    id: ID!
+    orders: [Order!]! @hasMany
+    name: String!
+    email: String!
+    email_verified_at: DateTime
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Product {
+    id: ID!
+    name: String!
+    orders: [Order!]! @belongsToMany
+    description: String!
+    price: Int!
+    count: Int!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Order {
+    id: ID!
+    address: String!
+    user: User! @belongsTo
+    products: [Product!]! @belongsToMany
+    shipped: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
